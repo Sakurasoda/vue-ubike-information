@@ -1,7 +1,10 @@
 const vm = Vue.createApp({
     data () {
       return {
-        ubikeStops: []
+          ubikeStops: [],
+          searchText: "",
+          currentSort: "sno",
+          isSortAsec: true
       }
     },
     methods: {
@@ -17,7 +20,16 @@ const vm = Vue.createApp({
         time.push(t.substr(12, 2));
 
         return date.join("/") + ' ' + time.join(":");
-      }
+      },
+        setCurrentSort(sortType){
+            if (sortType === this.currentSort) {
+                this.isSortAsec = !this.isSortAsec;
+            }
+            else {
+                this.currentSort = sortType;
+                this.isSortAsec = true;
+            }
+        }
     },
     created() {
 
@@ -36,5 +48,19 @@ const vm = Vue.createApp({
               this.ubikeStops = Object.keys(res.retVal).map(key => res.retVal[key]);
           });
 
+    },
+    computed: {
+        ubikeSort(){
+            let ubikeStopSort = this.ubikeStops;
+            
+            if (this.searchText){
+               ubikeStopSort = ubikeStopSort.filter(r=>r.sna.toLowerCase().includes(this.searchText.toLowerCase())); 
+            }
+            
+            return this.isSortAsec
+                ? ubikeStopSort.sort((a, b) => a[this.currentSort] - b[this.currentSort] )
+                : ubikeStopSort.sort((a, b) => b[this.currentSort] - a[this.currentSort] );
+        }
+        
     }
 }).mount('#app');

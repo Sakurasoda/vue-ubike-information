@@ -18,19 +18,20 @@
 
   <div id="app">
 
+    <input v-model.trim="searchText" type="text">
     <table class="table table-striped">
       <thead>
         <tr>
-          <th>#</th>
+          <th v-on:click="setCurrentSort('sno')">#</th>
           <th>場站名稱</th>
           <th>場站區域</th>
-          <th>目前可用車輛</th>
-          <th>總停車格</th>
+          <th v-on:click="setCurrentSort('sbi')">目前可用車輛</th>
+          <th v-on:click="setCurrentSort('tot')">總停車格</th>
           <th>資料更新時間</th>
         </tr>
       </thead>
       <tbody>
-        <tr v-for="s in ubikeStops">
+        <tr v-for="s in ubikeSort">
           <td>{{ s.sno }}</td>
           <td>{{ s.sna }}</td>
           <td>{{ s.sarea }}</td>
